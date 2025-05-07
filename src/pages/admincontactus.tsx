@@ -8,10 +8,10 @@ const AdminContactUs = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   // Fetch messages from API
   useEffect(() => {
-    axios.get('http://localhost:3001/ContactMessages')
+    axios.get('`${API_BASE_URL}/ContactMessages')
       .then((response) => {
         setMessages(response.data);
       })
@@ -23,7 +23,7 @@ const AdminContactUs = () => {
   // Function to fetch and show a message in the modal
   const handleView = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/ContactMessages/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/ContactMessages/${id}`);
       setSelectedMessage(response.data);
       setIsModalOpen(true);
     } catch (error) {
@@ -35,7 +35,7 @@ const AdminContactUs = () => {
   // Function to handle message deletion
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3001/ContactMessages/${id}`);
+      await axios.delete(`${API_BASE_URL}/ContactMessages/${id}`);
       
       // Update state to remove the deleted message
       setMessages(messages.filter((message) => message._id !== id));

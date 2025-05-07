@@ -11,7 +11,7 @@ interface Root {
   hours: string;
   district: string;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const AdminRoot = () => {
   const [roots, setRoots] = useState<Root[]>([]);
   const location = useLocation();
@@ -19,7 +19,7 @@ const AdminRoot = () => {
   useEffect(() => {
     const fetchRoots = async () => {
       try {
-        const response = await fetch('http://localhost:3001/roots');
+        const response = await fetch('${API_BASE_URL}/roots');
         if (response.ok) {
           const data: Root[] = await response.json();
           setRoots(data);

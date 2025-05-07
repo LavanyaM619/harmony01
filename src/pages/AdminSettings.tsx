@@ -12,7 +12,7 @@ const AdminSettings = () => {
     darkMode: localStorage.getItem('darkMode') === 'true',
     language: 'en',
   });
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
@@ -58,7 +58,7 @@ const AdminSettings = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3001/admin/change-password",
+        "${API_BASE_URL}/admin/change-password",
         {
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword

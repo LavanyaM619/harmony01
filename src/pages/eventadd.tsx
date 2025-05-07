@@ -8,7 +8,7 @@ interface Event {
   image: string;
   description: string;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const EventAdd = () => {
   const [event, setEvent] = useState<Event>({
     name: "",
@@ -56,8 +56,8 @@ const EventAdd = () => {
     try {
       const method = event._id ? "PUT" : "POST";
       const url = event._id
-        ? `http://localhost:3001/events/${event._id}`
-        : "http://localhost:3001/events";
+        ? `${API_BASE_URL}/events/${event._id}`
+        : "${API_BASE_URL}/events";
 
       const response = await fetch(url, {
         method,

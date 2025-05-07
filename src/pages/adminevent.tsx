@@ -10,7 +10,7 @@ interface Event {
   description?: string;
   createdAt?: string;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const AdminEvent = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,7 @@ const AdminEvent = () => {
     // Function to fetch events
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:3001/events');
+        const response = await fetch('${API_BASE_URL}/events');
         const data = await response.json();
         if (response.ok) {
           setEvents(data);

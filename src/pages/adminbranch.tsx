@@ -11,7 +11,7 @@ interface Branch {
   hours: string;
   district: string;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const AdminBranch = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const location = useLocation();
@@ -19,7 +19,7 @@ const AdminBranch = () => {
   useEffect(() => {
     const fetchBranches = async () => {
       try {
-        const response = await fetch('http://localhost:3001/branches');
+        const response = await fetch('`${API_BASE_URL}/branches');
         if (response.ok) {
           const data: Branch[] = await response.json(); 
           setBranches(data);
@@ -39,7 +39,7 @@ const AdminBranch = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this branch?')) {
       try {
-        const response = await fetch(`http://localhost:3001/branches/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/branches/${id}`, {
           method: 'DELETE',
         });
 

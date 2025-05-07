@@ -8,6 +8,7 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +43,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3001/Contact", formData);
+      const response = await axios.post("${API_BASE_URL}/Contact", formData);
       console.log(response);
       setSuccessMessage('Thank you for your message. We will get back to you shortly.');
       setFormData({

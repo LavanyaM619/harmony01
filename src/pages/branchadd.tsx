@@ -28,7 +28,7 @@ const BranchAdd = () => {
     manager: '',
     hours: '',
   });
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const BranchAdd = () => {
 
     try {
       const method = branch._id ? 'PUT' : 'POST'; // Use PUT for edit, POST for add
-      const url = branch._id ? `http://localhost:3001/branches/${branch._id}` : 'http://localhost:3001/branches';
+      const url = branch._id ? `${API_BASE_URL}/branches/${branch._id}` : '${API_BASE_URL}/branches';
 
       const response = await fetch(url, {
         method,

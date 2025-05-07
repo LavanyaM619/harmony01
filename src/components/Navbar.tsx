@@ -1,25 +1,32 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+interface Branch {
+  id: string;
+  district: string;
+}
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [branches, setBranches] = useState([]); // Store the branches data
+  const [branches, setBranches] = useState<Branch[]>([]);
 
   useEffect(() => {
     const fetchBranches = async () => {
       try {
-        const response = await fetch('http://localhost:3001/branches');
+        const response = await fetch(`${API_BASE_URL}/branches`);
         const data = await response.json();
 
-        // Remove duplicates by district name
-        const uniqueBranches = data.filter((value, index, self) =>
-          index === self.findIndex((t) => t.district === value.district)
+        const uniqueBranches = data.filter(
+          (value: Branch, index: number, self: Branch[]) =>
+            index === self.findIndex((t) => t.district === value.district)
         );
 
-        setBranches(uniqueBranches); // Update state with the filtered unique branches
+        setBranches(uniqueBranches);
       } catch (error) {
         console.error('Error fetching branches:', error);
       }
@@ -29,26 +36,21 @@ const Navbar = () => {
       setScrolled(window.scrollY > 10);
     };
 
-    fetchBranches(); // Fetch branch details when the component mounts
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    fetchBranches();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out px-4 md:px-8",
-        scrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out px-4 md:px-8',
+        scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
       )}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
-        <Link 
-          to="/" 
-          className="flex items-center space-x-2 group" 
-          aria-label="Harmony Investment Home"
-        >
+        <Link to="/" className="flex items-center space-x-2 group" aria-label="Harmony Investment Home">
           <div className="w-10 h-10 rounded-full bg-harmony-600 flex items-center justify-center text-white font-display text-xl font-bold transition-transform duration-300 group-hover:scale-110">
             H
           </div>
@@ -57,12 +59,11 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Centered Desktop Navigation */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6 mx-auto">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/about">About Us</NavLink>
 
-          {/* Branch Details Dropdown */}
           <div className="relative group">
             <button className="flex items-center space-x-1 px-4 py-2 rounded-md text-gray-700 hover:text-harmony-600 hover:bg-gray-50 transition-all duration-300">
               <span>Branch Details</span>
@@ -84,20 +85,20 @@ const Navbar = () => {
           <NavLink to="/contact">Contact</NavLink>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden focus:outline-none transition-transform duration-300 hover:scale-110" 
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden focus:outline-none transition-transform duration-300 hover:scale-110"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      <div 
+      {/* Mobile Menu */}
+      <div
         className={cn(
-          "fixed inset-0 bg-white/95 backdrop-blur-sm z-40 transform transition-all duration-500 ease-in-out md:hidden pt-20",
-          isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          'fixed inset-0 bg-white/95 backdrop-blur-sm z-40 transform transition-all duration-500 ease-in-out md:hidden pt-20',
+          isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
         )}
       >
         <div className="flex flex-col space-y-2 p-4">
@@ -111,9 +112,9 @@ const Navbar = () => {
               </summary>
               <div className="mt-2 space-y-1 px-4">
                 {branches.map((branch) => (
-                  <MobileNavLink 
-                    key={branch.id} 
-                    to={`/branches/${branch.district.toLowerCase()}`} 
+                  <MobileNavLink
+                    key={branch.id}
+                    to={`/branches/${branch.district.toLowerCase()}`}
                     onClick={() => setIsOpen(false)}
                   >
                     {branch.district}
@@ -129,19 +130,19 @@ const Navbar = () => {
   );
 };
 
-const NavLink = ({ to, children }) => (
-  <Link 
-    to={to} 
+const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+  <Link
+    to={to}
     className="px-4 py-2 text-gray-700 hover:text-harmony-600 hover:bg-gray-50 rounded-md transition-all duration-300 hover:scale-105"
   >
     {children}
   </Link>
 );
 
-const MobileNavLink = ({ to, onClick, children }) => (
-  <Link 
-    to={to} 
-    className="block py-2 px-3 text-gray-700 hover:text-harmony-600 hover:bg-gray-50 rounded-md transition-all duration-300 transform hover:translate-x-2" 
+const MobileNavLink = ({ to, onClick, children }: { to: string; onClick: () => void; children: React.ReactNode }) => (
+  <Link
+    to={to}
+    className="block py-2 px-3 text-gray-700 hover:text-harmony-600 hover:bg-gray-50 rounded-md transition-all duration-300 transform hover:translate-x-2"
     onClick={onClick}
   >
     {children}

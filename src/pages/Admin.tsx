@@ -44,7 +44,7 @@ const Admin = () => {
     recentBranches: [],
     recentRoots: []
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);//`${API_BASE_URL}
 
   // Fetch all dashboard data
   useEffect(() => {
@@ -52,9 +52,9 @@ const Admin = () => {
       try {
         setLoading(true);
         const [contactsRes, branchesRes, rootsRes] = await Promise.all([
-          axios.get("http://localhost:3001/ContactMessages"),
-          axios.get("http://localhost:3001/branches"),
-          axios.get("http://localhost:3001/roots")
+          axios.get("${API_BASE_URL}/ContactMessages"),
+          axios.get("${API_BASE_URL}/branches"),
+          axios.get("${API_BASE_URL}/roots")
         ]);
 
         setStats({

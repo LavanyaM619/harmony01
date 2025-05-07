@@ -24,7 +24,7 @@ interface Root {
   manager: string;
   hours: string;
 }
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const BranchAndRootDetails = () => {
   const { location } = useParams<{ location: string }>(); // Get the district from the URL params
   const [branches, setBranches] = useState<Branch[]>([]); // Store all the branches
@@ -35,11 +35,11 @@ const BranchAndRootDetails = () => {
     const fetchBranchAndRootDetails = async () => {
       try {
         // Fetch branch data
-        const branchResponse = await fetch('http://localhost:3001/branches');
+        const branchResponse = await fetch('${API_BASE_URL}/branches');
         const branchData = await branchResponse.json();
 
         // Fetch root data
-        const rootResponse = await fetch('http://localhost:3001/roots');
+        const rootResponse = await fetch('${API_BASE_URL}/roots');
         const rootData = await rootResponse.json();
 
         // Filter branches and roots based on the district in the URL (case-insensitive)

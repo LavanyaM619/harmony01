@@ -1,6 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+// Load environment variables
+require('dotenv').config();
+
 const ContactModel = require('./models/contact');
 const BranchModel = require('./models/branch');
 const EventModel = require('./models/event');
@@ -17,7 +21,7 @@ app.use(express.urlencoded({ limit: '1mb', extended: true }));
 
 // MongoDB Connection
 mongoose
-  .connect('mongodb+srv://lalu:lalu1999@cluster0.n4q8d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -271,6 +275,8 @@ app.get('/api/events', async (req, res) => {
 });
 
 // Start Server
-app.listen(3001, () => {
-  console.log('Server is running on port 3001');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
