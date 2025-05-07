@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -8,7 +10,7 @@ const Contact = () => {
     email: '',
     message: ''
   });
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +30,8 @@ const Contact = () => {
     setSuccessMessage('');
 
     // Basic validation
-    if (!formData.name || !formData.subject || !formData.email || !formData.message) {
+    const { name, subject, email, message } = formData;
+    if (!name || !subject || !email || !message) {
       setErrorMessage('All fields are required.');
       setIsSubmitting(false);
       return;
@@ -36,14 +39,14 @@ const Contact = () => {
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(email)) {
       setErrorMessage('Please enter a valid email address.');
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const response = await axios.post("${API_BASE_URL}/Contact", formData);
+      const response = await axios.post(`${API_BASE_URL}/contact`, formData); // ✅ Fixed template literal
       console.log(response);
       setSuccessMessage('Thank you for your message. We will get back to you shortly.');
       setFormData({
