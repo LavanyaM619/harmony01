@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,7 +12,6 @@ const AdminLogin: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const navigate = useNavigate();
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     // Check for saved credentials if remember me was checked
     const savedEmail = localStorage.getItem("adminEmail");
@@ -33,7 +33,8 @@ const AdminLogin: React.FC = () => {
     }
 
     try {
-      const response = await axios.post("${API_BASE_URL}/admin/login", { email, password });
+      const response = await axios.post(`${API_BASE_URL}/admin/login`, { email, password });
+
 
       // Store token and role in localStorage
       localStorage.setItem("adminToken", response.data.token);
